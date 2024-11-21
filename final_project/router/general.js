@@ -1,19 +1,15 @@
 const express = require('express');
-let books = require('./booksdb.js');  // Assuming this file contains your books data
+const books = require('./booksdb.js'); // Import your mock books database
 const public_users = express.Router();
 
-// Route for retrieving book details
-public_users.get('/', function (req, res) {
-    return res.status(200).json({ books });
-});
-
-// Get book review (public)
-public_users.get('/review/:isbn', function (req, res) {
-    const { isbn } = req.params;
-    if (books[isbn]) {
-        return res.status(200).json(books[isbn].reviews || { message: "No reviews available." });
-    } else {
-        return res.status(404).json({ message: "Book not found." });
+// Route to get the list of books available in the shop
+public_users.get('/books', (req, res) => {
+    try {
+        // Return all the books as a JSON response
+        res.json(books);
+    } catch (error) {
+        console.error("Error fetching books: ", error);
+        res.status(500).send("Error fetching books.");
     }
 });
 
