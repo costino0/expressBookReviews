@@ -72,11 +72,11 @@ router.put('/auth/review/:isbn', (req, res) => {
     if (existingReviewIndex > -1) {
         // Modify existing review
         books[isbn].reviews[existingReviewIndex].review = review;
-        return res.status(200).json({ message: "Review updated successfully." });
+        return res.status(200).json({ message: `The review for the book with ISBN ${isbn} has been updated.` });
     } else {
         // Add new review if it's the first time the user is reviewing the book
         books[isbn].reviews.push({ username, review });
-        return res.status(200).json({ message: "Review added successfully." });
+        return res.status(200).json({ message: `The review for the book with ISBN ${isbn} has been added.` });
     }
 });
 
