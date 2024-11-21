@@ -1,34 +1,25 @@
 const express = require('express');
-const axios = require('axios'); // Axios to make HTTP requests
-const books = require('./booksdb.js'); // Import the mock book data
+const axios = require('axios');  // Import axios for HTTP requests
+const books = require('./booksdb.js');  // Mock book data
 const public_users = express.Router();
 
-// Route to get the list of books available in the shop
-public_users.get('/books', (req, res) => {
-    try {
-        res.json(books); // Return all books
-    } catch (error) {
-        console.error("Error fetching books:", error);
-        res.status(500).send("Error fetching books.");
-    }
-});
-
-// Route to get the details of a book based on ISBN (using async/await)
-public_users.get('/books/:isbn', async (req, res) => {
-    const { isbn } = req.params;
+// Route to get books based on the author's name (using async/await)
+public_users.get('/books/author/:author', async (req, res) => {
+    const { author } = req.params;
 
     try {
-        // Here we're checking if the book exists in the mock database first
-        if (!books[isbn]) {
-            return res.status(404).json({ message: "Book not found." });
+        // Filter the books by author name (case-insensitive)
+        const filteredBooks = Object.values(books).filter(book => book.author.toLowerCase() === author.toLowerCase());
+
+        if (filteredBooks.length === 0) {
+            return res.status(404).json({ message: "No books found by this author." });
         }
 
-        // If the book is found, return the details
-        const bookDetails = books[isbn];
-        res.json(bookDetails);
+        // If books are found, return them
+        res.json(filteredBooks);
     } catch (error) {
-        console.error("Error fetching book details:", error);
-        res.status(500).json({ message: "Error fetching book details." });
+        console.error("Error fetching books by author:", error);
+        res.status(500).json({ message: "Error fetching books by author." });
     }
 });
 
