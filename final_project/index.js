@@ -17,7 +17,7 @@ app.use(
 
 // Routes
 app.use("/customer", customer_routes);
-app.use("/", genl_routes);  // This will ensure the /books route is accessible
+app.use("/", genl_routes);
 
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
